@@ -25,8 +25,8 @@ The Freebody Loads Extractor takes the .dat file, extracts the values from the f
 ## Next
 
 For future work I plan to implement more features. Some of them are (and the list is open):
-[] make a better GUI, improve design
-[] implement feature that displays what .dat files the user has selected
-[] implement feature that allows user to order the extracted data for specified load cases
-[] use Patran_Command_Language (PCL) to give option of extraction data from sections without opening Patran, just by specifying elements, nodes, summation points and coordinate frames
-[] ...
+-[] make a better GUI, improve design
+-[] implement feature that displays what .dat files the user has selected
+-[] implement feature that allows user to order the extracted data for specified load cases
+-[] use Patran_Command_Language (PCL) to give option of extraction data from sections without opening Patran, just by specifying elements, nodes, summation points and coordinate frames
+-[] ...
