@@ -8,6 +8,7 @@ For more informations about how the program works, check the [wiki page](https:/
 
 For future work I plan to implement more features. Some of them are (and the list is open):
 
+- [ ] implement errors and exceptions 
 - [ ] make a better GUI, improve design
 - [ ] implement feature that displays what .dat files the user has selected
 - [ ] implement feature that allows user to order the extracted data for specified load cases
