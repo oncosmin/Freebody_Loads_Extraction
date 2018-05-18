@@ -1,33 +1,34 @@
-######################################################################
-#Extract Data from Freebody Loads Patran Output (dat. file)
-######################################################################
-
+import re
+import xlwt
+import os
 from tkinter import filedialog
 from tkinter import *
 from tkinter import messagebox
 
-######################################################################
-# Define function for numerical data extraction from the input file .dat
-######################################################################
+
+"""
+Define function for numerical data extraction from the input file .dat
+"""
 
 def function(inputFile):
 
-    # Data - list that contains all the forces/moments data in string format
+   """Data - list that contains all the forces/moments data in string format"""
 
     data = []
 
-    # Open input file and read every line, extract data when line begins with Totals
+    """Open input file and read every line, extract data when line begins with Totals"""
     
     with open(inputFile, 'r') as f:
         for line in f:
             if line.startswith('Totals'):
                 data.append(line)
 
-    # Save total number of load cases in lenCases
+    
+	"""Save total number of load cases in lenCases"""
 	
     lenCases = len(data)
     
-    # Extract numbers from Totals line in string format
+    """Extract numbers from Totals line in string format"""
 	
     n = 0
     for i in data:
@@ -35,13 +36,13 @@ def function(inputFile):
         data[n] = a[4:]
         n += 1
 		
-    # Convert numbers from string format to float
+    """ Convert numbers from string format to float"""
 
     for totals in data:
         for number in range(6):
             totals[number] = float(totals[number])
 
-    # Append numbers to values list (here you can insert a specific order if you want)
+    """Append numbers to values list (here you can insert a specific order if you want)""""
 
     values = []
     values.append(["Fx", "Fy", "Fz", "Mx", "My", "Mz"])
@@ -51,15 +52,11 @@ def function(inputFile):
     return (values, lenCases)
 
 
-######################################################################
-# Define function for load case name extraction from the input file .dat
-######################################################################
+"""
+Define function for load case name extraction from the input file .dat
+"""
 
 def function2(inputFile):
-
-    # Import regular expression module to split data on line
-	
-    import re  
 
     loadcases = ['Load Case']
 
@@ -70,16 +67,14 @@ def function2(inputFile):
                 loadcases.append(entries[6][:-1])
     return (loadcases)
 
-#######################################################################
-# Main Program execution function
-#######################################################################
+"""
+Main Program execution function
+"""
 
 def runExtraction():
 
-    # Create output Excel file
+    """ Create output Excel file"""
 	
-    import xlwt
-    import os
     wb = xlwt.Workbook()
 	
     global lst
@@ -97,9 +92,9 @@ def runExtraction():
     wb.save('Results.xls')
     messagebox.showinfo('Status', 'Execution Successful')
 
-######################################################################
-# TKINTER Module for GUI implementation
-######################################################################
+"""
+TKINTER Module for GUI implementation
+"""
 
 def browseFunction():
     global lst
@@ -111,9 +106,9 @@ master = Tk()
 master.wm_title("FLEX - Freebody Loads Extractor")
 lst = []
 	
-######################################################################
-# Create buttons and text for GUI 
-######################################################################
+"""
+Create buttons and text for GUI 
+"""
 
 T = Text(master, height=10, width=60)
 T.pack()
