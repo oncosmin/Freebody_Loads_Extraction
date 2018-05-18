@@ -14,42 +14,39 @@ def function(inputFile):
 
    """Data - list that contains all the forces/moments data in string format"""
 
-    data = []
+   data = []
 
-    """Open input file and read every line, extract data when line begins with Totals"""
+   """Open input file and read every line, extract data when line begins with Totals"""
     
-    with open(inputFile, 'r') as f:
+   with open(inputFile, 'r') as f:
         for line in f:
             if line.startswith('Totals'):
                 data.append(line)
 
-    
-	"""Save total number of load cases in lenCases"""
+   lenCases = len(data)
+     
+   """Extract numbers from Totals line in string format"""
 	
-    lenCases = len(data)
-    
-    """Extract numbers from Totals line in string format"""
-	
-    n = 0
-    for i in data:
+   n = 0
+   for i in data:
         a = i.split(',')
         data[n] = a[4:]
         n += 1
 		
-    """ Convert numbers from string format to float"""
+   """ Convert numbers from string format to float"""
 
-    for totals in data:
+   for totals in data:
         for number in range(6):
             totals[number] = float(totals[number])
 
-    """Append numbers to values list (here you can insert a specific order if you want)""""
+   """Append numbers to values list (here you can insert a specific order if you want)"""
 
-    values = []
-    values.append(["Fx", "Fy", "Fz", "Mx", "My", "Mz"])
+   values = []
+   values.append(["Fx", "Fy", "Fz", "Mx", "My", "Mz"])
 
-    for n in range(lenCases):
+   for n in range(lenCases):
         values.append(data[n])
-    return (values, lenCases)
+   return (values, lenCases)
 
 
 """
