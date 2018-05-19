@@ -10,7 +10,7 @@ from tkinter import messagebox
 Define function for numerical data extraction from the input file .dat
 """
 
-def function(inputFile):
+def parse_data_file(inputFile):
 
    """Data - list that contains all the forces/moments data in string format"""
 
@@ -76,7 +76,7 @@ def runExtraction():
 	
     global lst
     for filename in lst:
-        date, lenCases = function(filename)
+        date, lenCases = parse_data_file(filename)
         loadcases = function2(filename)
         head, tail = os.path.split(filename)
         ws = wb.add_sheet(tail)
