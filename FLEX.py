@@ -6,105 +6,73 @@ from tkinter import *
 from tkinter import messagebox
 
 
-"""
-Define function for numerical data extraction from the input file .dat
-"""
-
 def parse_data_file(inputFile):
 
-   """Data - list that contains all the forces/moments data in string format"""
-
-   data = []
-
-   """Open input file and read every line, extract data when line begins with Totals"""
-    
-   with open(inputFile, 'r') as f:
-        for line in f:
-            if line.startswith('Totals'):
-                data.append(line)
-
-   lenCases = len(data)
-     
-   """Extract numbers from Totals line in string format"""
-	
-   n = 0
-   for i in data:
-        a = i.split(',')
-        data[n] = a[4:]
-        n += 1
-		
-   """ Convert numbers from string format to float"""
-
-   for totals in data:
-        for number in range(6):
-            totals[number] = float(totals[number])
-
-   """Append numbers to values list (here you can insert a specific order if you want)"""
-
-   values = []
-   values.append(["Fx", "Fy", "Fz", "Mx", "My", "Mz"])
-
-   for n in range(lenCases):
-        values.append(data[n])
-   return (values, lenCases)
-
-
-"""
-Define function for load case name extraction from the input file .dat
-"""
-
-def function2(inputFile):
-
-    loadcases = ['Load Case']
+    """
+    Data is the list that contains all the forces/moments data in string format.
+    Open the dat file, go through every line, stop at line Totals, take line and
+    split at comma, take last 6 values from the line and convert them to float.
+    Similar to numerical value extraction, we extract the loadcases name.
+    """
 
     with open(inputFile, 'r') as f:
-        for lines in f:
-            if lines.startswith('"Freebody Loads"'):
-                entries = re.split(" ", lines, 18)
-                loadcases.append(entries[6][:-1])
-    return (loadcases)
+        data = [list(map(float, line.split(',')[4:]))
+        for line in f if line.startswith('Totals')]
+        values = [["Fx", "Fy", "Fz", "Mx", "My", "Mz"]] + data
+
+    with open(inputFile, 'r') as g:
+        loadcases = [re.split(" ",lines,18)[6][:-1]
+        for lines in g if lines.startswith('"Freebody Loads"')]
+        nameLoadcases = ["Freebody Loads"] + loadcases
+
+    return (values, len(data), nameLoadcases)
 
 """
 Main Program execution function
 """
 
-def runExtraction():
+
+def run_extraction():
 
     """ Create output Excel file"""
-	
+
     wb = xlwt.Workbook()
-	
+
     global lst
     for filename in lst:
-        date, lenCases = parse_data_file(filename)
-        loadcases = function2(filename)
+        date, lenCases, loadcases = parse_data_file(filename)
         head, tail = os.path.split(filename)
         ws = wb.add_sheet(tail)
-        for i in range(lenCases+1):
+        for i in range(lenCases + 1):
             for j in range(7):
                 if j == 0:
                     ws.write(i, j, loadcases[i])
                 else:
-                    ws.write(i, j, date[i][j-1])
+                    ws.write(i, j, date[i][j - 1])
     wb.save('Results.xls')
     messagebox.showinfo('Status', 'Execution Successful')
+
 
 """
 TKINTER Module for GUI implementation
 """
 
-def browseFunction():
+
+def browse_data_file():
     global lst
-    filez =  filedialog.askopenfilenames(initialdir = "/",title = "Select file",filetypes = (("dat files","*.dat"),("all files","*.*")))
-    lst=list(filez)
+    filez = filedialog.askopenfilenames(
+            initialdir="/", title="Select file", filetypes=((
+            "dat files", "*.dat"), ("all files", "*.*")))
+    lst = list(filez)
     return (lst)
 
 master = Tk()
 master.wm_title("FLEX - Freebody Loads Extractor")
 lst = []
-	
+
+
 """
-Create buttons and text for GUI 
+Create buttons and text for GUI
 """
 
 T = Text(master, height=10, width=60)
@@ -116,9 +84,11 @@ T.insert(END, "This is a script for extracting forces and moments "
          "Step.3. A Results.xls file will be created with the totals\n"
          "output for each Load Case in a separate worksheet\n\n"
         "Note: Name of the .dat file should not exceed 27 characters")
-b = Button(master, text="Browse file", bg='red', width=10, height=2, bd=3, command=browseFunction)
+b = Button(master, text="Browse file", bg='red',
+     width=10, height=2, bd=3, command=browse_data_file)
 b.pack(side=LEFT)
-c = Button(master, text="Run", bg='green', width=10, height=2, bd=3, command=runExtraction)
+c = Button(master, text="Run", bg='green',
+     width=10, height=2, bd=3, command=run_extraction)
 c.pack(side=LEFT)
 
-master.mainloop()
+master.mainloop() 
